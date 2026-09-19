@@ -18,8 +18,10 @@ export class UsersService {
 
     const user = await this.prisma.user.create({
       data: {
-        ...createUserDto,
+        name: createUserDto.name,
+        email: createUserDto.email,
         password: hashedPassword,
+        role: 'CUSTOMER',
       },
     });
 
@@ -44,7 +46,7 @@ export class UsersService {
     return user;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: any) {
     await this.findOneById(id);
 
     const data: any = { ...updateUserDto };

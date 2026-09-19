@@ -1,18 +1,31 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const configService = app.get(ConfigService);
+  const jwtSecret = configService.get<string>('JWT_SECRET');
+  if (!jwtSecret) {
+    console.error('FATAL: A variável de ambiente JWT_SECRET é obrigatória e não foi configurada.');
+    process.exit(1);
+  }
+
   // Set global prefix
   app.setGlobalPrefix('api');
 
-  // Configure CORS for Angular Frontend
+  // Configure CORS from environment
+  const allowedOriginsEnv = configService.get<string>('ALLOWED_ORIGINS');
+  const allowedOrigins = allowedOriginsEnv
+    ? allowedOriginsEnv.split(',').map((o) => o.trim()).filter(Boolean)
+    : ['http://localhost:4200'];
+
   app.enableCors({
-    origin: ['http://localhost:4200'],
+    origin: allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });

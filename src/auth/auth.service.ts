@@ -135,7 +135,7 @@ export class AuthService {
   }
 
   async generateTokens(user: any) {
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user.id, role: user.role };
     const accessToken = this.jwtService.sign(payload);
     
     // Generate refresh token (e.g. valid for 7 days)
@@ -146,6 +146,12 @@ export class AuthService {
     return {
       accessToken,
       refreshToken,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     };
   }
 }
