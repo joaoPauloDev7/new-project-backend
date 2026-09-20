@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -18,6 +18,14 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
   ) {}
+
+  async getRegistrationStatus() {
+    const totalUsers = await this.prisma.user.count();
+    return {
+      registrationEnabled: totalUsers === 0,
+      totalUsers,
+    };
+  }
 
   async validateUser(loginDto: LoginDto) {
     const user = await this.usersService.findOneByEmail(loginDto.email);
@@ -43,9 +51,17 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto) {
+    const totalUsers = await this.prisma.user.count();
+    if (totalUsers >= 1) {
+      throw new ForbiddenException(
+        'O cadastro de novas contas está desativado. O sistema permite apenas a conta do proprietário da loja.'
+      );
+    }
+
     const verificationToken = crypto.randomBytes(32).toString('hex');
     const user = await this.usersService.create({
       ...registerDto,
+      role: 'ADMIN',
     });
 
     await this.usersService.update(user.id, {

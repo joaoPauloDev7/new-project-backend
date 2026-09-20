@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,6 +9,13 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
+    const totalUsers = await this.prisma.user.count();
+    if (totalUsers >= 1) {
+      throw new ForbiddenException(
+        'Limite máximo de usuários atingido. Apenas uma conta de administrador é permitida no sistema.'
+      );
+    }
+
     const existingUser = await this.findOneByEmail(createUserDto.email);
     if (existingUser) {
       throw new ConflictException('E-mail já cadastrado.');

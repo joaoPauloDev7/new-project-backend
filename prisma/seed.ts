@@ -6,28 +6,26 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('--- Iniciando Seed Barone Store ---');
 
-  // 1. Criar Usuário Administrador padrão
-  const adminEmail = 'admin@baronestore.com.br';
-  const hashedPassword = await bcrypt.hash('admin123', 10);
+  // 1. Criar Usuário Administrador padrão apenas se a base estiver vazia
+  const userCount = await prisma.user.count();
+  if (userCount === 0) {
+    const adminEmail = 'admin@baronestore.com.br';
+    const hashedPassword = await bcrypt.hash('admin123', 10);
 
-  const admin = await prisma.user.upsert({
-    where: { email: adminEmail },
-    update: {
-      name: 'Administrador Barone',
-      active: true,
-      emailVerified: true,
-      role: 'ADMIN',
-    },
-    create: {
-      name: 'Administrador Barone',
-      email: adminEmail,
-      password: hashedPassword,
-      active: true,
-      emailVerified: true,
-      role: 'ADMIN',
-    },
-  });
-  console.log(`[Seed] Administrador pronto: ${admin.email}`);
+    const admin = await prisma.user.create({
+      data: {
+        name: 'Administrador Barone',
+        email: adminEmail,
+        password: hashedPassword,
+        active: true,
+        emailVerified: true,
+        role: 'ADMIN',
+      },
+    });
+    console.log(`[Seed] Administrador padrão criado: ${admin.email}`);
+  } else {
+    console.log(`[Seed] Administrador existente detectado (${userCount} usuário). Pulando criação de admin.`);
+  }
 
   // 2. Criar Categorias
   const categoriesData = [
