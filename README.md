@@ -85,7 +85,7 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      String   @default("CUSTOMER") // "ADMIN" ou "CUSTOMER"
+  role      String   @default("ADMIN") // "ADMIN" ou "CUSTOMER"
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
 }

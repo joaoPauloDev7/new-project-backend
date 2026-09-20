@@ -16,7 +16,7 @@ model User {
   email                 String    @unique
   password              String
   active                Boolean   @default(true)
-  role                  String    @default("CUSTOMER")
+  role                  String    @default("ADMIN")
   emailVerified         Boolean   @default(false) @map("email_verified")
   verificationToken     String?   @map("verification_token")
   resetPasswordToken    String?   @map("reset_password_token")
