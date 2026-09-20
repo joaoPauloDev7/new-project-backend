@@ -1,98 +1,198 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+<div align="center">
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+  <img src="https://nestjs.com/img/logo-small.svg" alt="NestJS Logo" width="100" />
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+  # ⚡ BARONE IMPORTS — BACKEND API
+  ### *RESTful API de Alta Performance para E-Commerce de Moda Urbana*
 
-## Description
+  [![NestJS](https://img.shields.io/badge/NestJS-11.0-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![Prisma](https://img.shields.io/badge/Prisma-6.0-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/)
+  [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+  [![JWT](https://img.shields.io/badge/Auth-JWT-black?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+  <br />
 
-## Project setup
+  <p align="center">
+    <strong>API REST robusta construída com NestJS, Prisma ORM e MySQL, fornecendo serviços de autenticação, catálogo de produtos, gerenciamento de categorias e suporte a uploads de alta resolução.</strong>
+  </p>
 
-```bash
-$ npm install
+</div>
+
+---
+
+## 📌 Visão Geral
+
+O backend da **Barone Imports** foi desenvolvido seguindo os princípios de **Clean Architecture** e modularidade do NestJS. Ele atende tanto a vitrine pública de alta performance quanto o painel administrativo restrito do lojista.
+
+### Destaques da Implementação:
+- **Suporte a Alto Volume de Dados (Payloads de 50MB)**: Configurado com parsers expandidos para suportar uploads de imagens em alta definição e catálogos volumosos.
+- **Armazenamento Otimizado**: Colunas de imagens em `LONGTEXT` no MySQL para persistência sem risco de truncamento.
+- **Autenticação Segura & RBAC**: Controle de acesso baseado em papéis (`ADMIN` e `CUSTOMER`) via JSON Web Tokens e Passport.
+- **Validação Rigorosa**: Pipes globais com `class-validator` e `class-transformer` para higienização e validação de DTOs.
+
+---
+
+## 🛠️ Tecnologias & Bibliotecas
+
+- **Framework**: [NestJS 11](https://nestjs.com/)
+- **Linguagem**: [TypeScript 5.7](https://www.typescriptlang.org/)
+- **ORM**: [Prisma 6](https://www.prisma.io/)
+- **Banco de Dados**: [MySQL 8.0](https://www.mysql.com/)
+- **Autenticação**: `@nestjs/jwt`, `@nestjs/passport`, `passport-jwt`, `bcrypt`
+- **Validação**: `class-validator`, `class-transformer`
+- **CORS & Segurança**: Headers seguros e controle de origens permitidas via variáveis de ambiente
+
+---
+
+## 📁 Estrutura de Pastas
+
+```text
+src/
+├── auth/                      # Módulo de Autenticação (Login, Registro, JWT)
+│   ├── dto/                   # DTOs de login e registro
+│   ├── guards/                # JwtAuthGuard, RolesGuard
+│   ├── strategies/            # JwtStrategy
+│   ├── auth.controller.ts
+│   └── auth.service.ts
+├── common/                    # Filtros, interceptors e decorators globais
+│   ├── decorators/            # @CurrentUser(), @Roles()
+│   ├── filters/               # HttpExceptionFilter global
+│   └── interceptors/          # LoggingInterceptor
+├── categories/                # Módulo de Categorias
+│   ├── dto/                   # CreateCategoryDto, UpdateCategoryDto
+│   ├── categories.controller.ts
+│   └── categories.service.ts
+├── products/                  # Módulo de Produtos & Variações
+│   ├── dto/                   # CreateProductDto, UpdateProductDto
+│   ├── products.controller.ts
+│   └── products.service.ts
+├── users/                     # Módulo de Usuários
+├── prisma/                    # Serviço e cliente do Prisma ORM
+│   ├── prisma.module.ts
+│   └── prisma.service.ts
+├── app.module.ts              # Módulo raiz da aplicação
+└── main.ts                    # Bootstrap com CORS, pipes globais e limites de 50MB
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ npm run start
+## 🗄️ Modelo de Dados (Prisma Schema)
 
-# watch mode
-$ npm run start:dev
+```prisma
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("CUSTOMER") // "ADMIN" ou "CUSTOMER"
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
 
-# production mode
-$ npm run start:prod
+model Category {
+  id          String    @id @default(uuid())
+  name        String
+  slug        String    @unique
+  description String?   @db.Text
+  image       String?   @db.LongText
+  products    Product[]
+  createdAt   DateTime  @default(now())
+}
+
+model Product {
+  id               String         @id @default(uuid())
+  name             String
+  slug             String         @unique
+  sku              String         @unique
+  description      String?        @db.Text
+  price            Decimal        @db.Decimal(10, 2)
+  promotionalPrice Decimal?       @db.Decimal(10, 2)
+  stock            Int            @default(0)
+  status           Boolean        @default(true)
+  gender           String         @default("Masculino")
+  highlight        Boolean        @default(false)
+  newLaunch        Boolean        @default(false)
+  sizes            Json?
+  colors           Json?
+  categoryId       String
+  category         Category       @relation(fields: [categoryId], references: [id])
+  images           ProductImage[]
+  createdAt        DateTime       @default(now())
+}
+
+model ProductImage {
+  id        String   @id @default(uuid())
+  url       String   @db.LongText
+  isMain    Boolean  @default(false)
+  order     Int      @default(0)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
 ```
 
-## Run tests
+---
 
+## 🔌 Principais Endpoints da API
+
+| Método | Rota | Descrição | Acesso |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/login` | Autenticação e retorno de Token JWT | Público |
+| `POST` | `/api/auth/register` | Registro de novo usuário | Público |
+| `GET` | `/api/products` | Listagem de produtos (filtros por categoria, gênero, status) | Público |
+| `GET` | `/api/products/:id` | Detalhes do produto por ID | Público |
+| `GET` | `/api/products/slug/:slug` | Detalhes do produto por Slug amigável | Público |
+| `POST` | `/api/products` | Cadastro de novo produto | Admin (JWT) |
+| `PATCH` | `/api/products/:id` | Atualização de produto | Admin (JWT) |
+| `PATCH` | `/api/products/:id/toggle-status` | Ativação/inativação de produto | Admin (JWT) |
+| `DELETE` | `/api/products/:id` | Exclusão de produto | Admin (JWT) |
+| `GET` | `/api/categories` | Listagem de categorias com contagem de produtos | Público |
+| `POST` | `/api/categories` | Cadastro de categoria | Admin (JWT) |
+| `PATCH` | `/api/categories/:id` | Atualização de categoria | Admin (JWT) |
+| `DELETE` | `/api/categories/:id` | Exclusão de categoria | Admin (JWT) |
+
+---
+
+## 🚀 Como Executar
+
+### 1. Instalação
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
+### 2. Configurar Variáveis de Ambiente (.env)
+Crie um arquivo `.env` na raiz do backend:
+```env
+# Banco de Dados (MySQL 8.0)
+DATABASE_URL="mysql://root:sua_senha@localhost:3306/barone_store"
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+# Autenticação JWT
+JWT_SECRET="sua_chave_super_secreta_barone_store_jwt_token_2026"
+JWT_EXPIRES_IN="1d"
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Servidor
+PORT=3000
+ALLOWED_ORIGINS="http://localhost:4200"
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 3. Sincronizar Banco com Prisma
+```bash
+npx prisma db push
+```
 
-## Resources
+### 4. Iniciar Servidor
+```bash
+# Modo desenvolvimento (watch)
+npm run start:dev
 
-Check out a few resources that may come in handy when working with NestJS:
+# Modo produção
+npm run build
+npm run start:prod
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+---
 
-## Support
+## 📱 Contato & Licença
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- **Projeto:** Barone Imports
+- **Licença:** Privada / Comercial
