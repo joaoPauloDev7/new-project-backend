@@ -34,7 +34,7 @@ model Category {
   name        String
   slug        String    @unique
   description String?   @db.Text
-  image       String?   @db.Text
+  image       String?   @db.LongText
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
@@ -76,7 +76,7 @@ model Product {
 
 model ProductImage {
   id        String   @id @default(uuid())
-  url       String   @db.Text
+  url       String   @db.LongText
   isMain    Boolean  @default(false) @map("is_main")
   order     Int      @default(0)
 
